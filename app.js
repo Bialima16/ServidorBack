@@ -50,9 +50,12 @@ app.get('/products/:id', async (req, res) => {
         .from('products')
         .select()
         .eq('id', req.params.id)
-    res.send(data);
+   if (error) return res.status(500).send(error);
 
-    console.log("retorno "+ data);
+    if (!data || data.length === 0) {
+        return res.status(404).send({ message: "Produto não encontrado" });
+    }
+    res.send(data[0]); 
 });
 
 app.post('/products', async (req, res) => {
